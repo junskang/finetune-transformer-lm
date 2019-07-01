@@ -13,11 +13,14 @@ from functools import partial
 
 def encode_dataset(*splits, encoder):
     encoded_splits = []
-    for split in splits[0]:
+    for split in splits[0]: # train, valid, test
         fields = []
-        for field in split:
+        for field in split: # context, claim, pm
             if isinstance(field[0], str):
                 field = encoder.encode(field)
+            else:
+                print ("\n[%s][%s]"%(type(field[0]), field[0][:100]))
+
             fields.append(field)
         encoded_splits.append(fields)
     return encoded_splits
@@ -38,6 +41,7 @@ def stsb_label_encoding(labels, nclass=6):
 def shape_list(x):
     """
     deal with dynamic shape in tensorflow cleanly
+    if a dimension is "None", use the static(?) one
     """
     ps = x.get_shape().as_list()
     ts = tf.shape(x)
@@ -167,3 +171,40 @@ def average_grads(tower_grads):
         grad_and_var = (grad, v)
         average_grads.append(grad_and_var)
     return average_grads
+
+def print_args(args):
+    print("DESC:%s" % (args.desc))
+    print("DATASET:%s" % (args.dataset))
+    print("LOG_DIR:%s" % (args.log_dir))
+    print("SAVE_DIR:%s" % (args.save_dir))
+    print("DATA_DIR:%s" % (args.data_dir))
+    print("SUBMISSION_DIR:%s" % (args.submission_dir))
+    print("SUBMIT:%s" % (args.submit))
+    print("ANALYSIS:%s" % (args.analysis))
+    print("SEED:%s" % (args.seed))
+    print("N_ITER:%s" % (args.n_iter))
+    print("N_BATCH:%s" % (args.n_batch))
+    print("MAX_GRAD_NORM:%s" % (args.max_grad_norm))
+    print("LR:%s" % (args.lr))
+    print("LR_WARMUP:%s" % (args.lr_warmup))
+    print("N_CTX:%s" % (args.n_ctx))
+    print("N_EMBD:%s" % (args.n_embd))
+    print("N_HEAD:%s" % (args.n_head))
+    print("N_LAYER:%s" % (args.n_layer))
+    print("EMBD_PDROP:%s" % (args.embd_pdrop))
+    print("ATTN_PDROP:%s" % (args.attn_pdrop))
+    print("RESID_PDROP:%s" % (args.resid_pdrop))
+    print("CLF_PDROP:%s" % (args.clf_pdrop))
+    print("L2:%s" % (args.l2))
+    print("VECTOR_L2:%s" % (args.vector_l2))
+    print("N_GPU:%s" % (args.n_gpu))
+    print("OPT:%s" % (args.opt))
+    print("AFN:%s" % (args.afn))
+    print("LR_SCHEDULE:%s" % (args.lr_schedule))
+    print("ENCODER_PATH:%s" % (args.encoder_path))
+    print("BPE_PATH:%s" % (args.bpe_path))
+    print("N_TRANSFER:%s" % (args.n_transfer))
+    print("LM_COEF:%s" % (args.lm_coef))
+    print("B1:%s" % (args.b1))
+    print("B2:%s" % (args.b2))
+    print("E:%s" % (args.e))
